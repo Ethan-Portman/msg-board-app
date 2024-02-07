@@ -1,3 +1,4 @@
+import Table from 'react-bootstrap/Table';
 import Message from "@/components/Message";
 
 const MessageList = () => {
@@ -8,7 +9,7 @@ const MessageList = () => {
     ]
 
     return (
-        <table>
+        <Table striped bordered hover>
             <thead>
                 <tr>
                     <th>ID</th>
@@ -21,7 +22,7 @@ const MessageList = () => {
                     <Message key={message.id} {...message} />
                 ))}
             </tbody>
-        </table>
+        </Table>
     );
 };
 
