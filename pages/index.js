@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Header from "@/components/Header"
+import MessageList from "@/components/MessageList"
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
       </Head>
 
       <Header />
+      <MessageList />
     </>
   );
 }
