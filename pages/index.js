@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Container, Row, Col } from 'react-bootstrap'
 import Header from "@/components/Header";
-import MessageList from "@/components/MessageList";
+import MessageBoard from "@/components/MessageBoard";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -17,7 +17,7 @@ export default function Home() {
         <Row className='justify-content-center'>
           <Col lg={8}>
             <Header />
-            <MessageList />
+            <MessageBoard />
             <Footer />
           </Col>
         </Row>
