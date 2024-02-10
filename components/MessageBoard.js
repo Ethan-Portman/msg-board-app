@@ -1,21 +1,19 @@
 import MessageList from "./MessageList";
 import NewMessageForm from "./NewMessageForm";
 import { useState } from "react";
+import axios from "axios";
 
-const MessageBoard = () => {
-    const [messages, setMessages] = useState([
-        { id: 0, name: "Bob", msgTxt: "Hello there" },
-        { id: 1, name: "Joe", msgTxt: "Hey" },
-        { id: 2, name: "Bob", msgTxt: "How are you?" }
-    ])
+const MessageBoard = ({ jsonData }) => {
+    const [messages, setMessages] = useState(jsonData);
 
-    const addNewMessage = (values) => {
-        const newMessage = {
-            id: messages.length,
-            name: values.name,
-            msgTxt: values.msgText,
-        };
-        setMessages([newMessage, ...messages]);
+    const addNewMessage = async (values) => {
+        try {
+            const response = await axios.post('http://172.30.71.9:3004/v1/messages', values);
+            setMessages([response.data, ...messages]);
+            console.log(messages);
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     return (

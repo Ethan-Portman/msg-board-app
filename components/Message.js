@@ -1,8 +1,8 @@
-const Message = ({ msgNum, name, msgTxt }) => (
+const Message = ({ msgNum, name, msgText }) => (
     <tr>
         <td>{msgNum + 1}</td>
         <td>{name}</td>
-        <td>{msgTxt}</td>
+        <td>{msgText}</td>
     </tr>
 );
 

@@ -3,8 +3,28 @@ import { Container, Row, Col } from 'react-bootstrap'
 import Header from "@/components/Header";
 import MessageBoard from "@/components/MessageBoard";
 import Footer from "@/components/Footer";
+import axios from 'axios';
 
-export default function Home() {
+// Function to allow Next.js to do Static Generation pre-rendering
+// Instead of client making the axios call, Next does and delivers results for you
+export async function getStaticProps() {
+  let jsonData;
+
+  try {
+    const { data } = await axios.get('http://localhost:3004/v1/messages');
+    jsonData = data;
+  } catch (error) {
+    console.log('API Error: ' + error);
+  }
+
+  return {
+    props: {
+      jsonData
+    }
+  }
+}
+
+export default function Home({ jsonData }) {
   return (
     <>
       <Head>
@@ -17,7 +37,7 @@ export default function Home() {
         <Row className='justify-content-center'>
           <Col lg={8}>
             <Header />
-            <MessageBoard />
+            <MessageBoard jsonData={jsonData} />
             <Footer />
           </Col>
         </Row>
