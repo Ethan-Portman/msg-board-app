@@ -15,6 +15,7 @@ const schema = yup.object().shape({
         .string()
         .trim()
         .min(6, 'Your password must be at least ${min} characters.')
+        .max(15, 'Your name cannot be more than ${max} characters.')
         .required('Password is required.'),
 });
 
