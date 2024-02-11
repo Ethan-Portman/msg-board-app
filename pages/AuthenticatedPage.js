@@ -7,17 +7,13 @@ const AuthenticatedPage = ({ jsonData, setToken }) => {
     const handleLogout = () => {
         sessionStorage.removeItem('token');
         setToken(null);
-    }
-
-
+    };
 
     return (
         <>
             <MessageBoard jsonData={jsonData} />
             <Button onClick={handleLogout}>LOG OUT</Button>
         </>
-
-
     );
 };
 
