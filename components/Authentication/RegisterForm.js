@@ -1,29 +1,43 @@
-import { Button, Card, Col, Form, Row } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Card, Form, Row, Col, Button, Alert } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import NameTaken from './NameTaken';
 
-// Define the Validation Schema for login
+// Define the Validation Schema for Registration
 const schema = yup.object().shape({
     name: yup
         .string()
         .trim()
-        .min(2, 'Your name must be at least ${min} characters.')
-        .max(15, 'Your name cannot be more than ${max} characters.')
+        .min(2, 'Name must be at least 2 characters.')
+        .max(15, 'Name cannot be more than 15 characters.')
         .matches(/^[A-Za-z0-9_]+$/, 'Invalid name. Use upper or lower case letters, 0 to 9, or underscore only.')
-        .required('Your name is required.'),
+        .required('Name is required.'),
     password: yup
         .string()
         .trim()
-        .min(6, 'Your password must be at least ${min} characters.')
-        .max(15, 'Your name cannot be more than ${max} characters.')
+        .min(6, 'Password must be at least 6 characters.')
+        .max(15, 'Password cannot be more than 15 characters.')
         .required('Password is required.'),
 });
 
-const LoginForm = ({ handleLogin }) => {
-    const handleFormData = (values, { resetForm, setSubmitting }) => {
-        handleLogin(values);
-        resetForm();
-        setSubmitting(false);
+const RegisterForm = ({ handleRegister }) => {
+    const [registerError, setRegisterError] = useState(null);
+
+    const handleFormData = async (values, { resetForm, setSubmitting }) => {
+        try {
+            await handleRegister(values);
+            resetForm();
+            setSubmitting(false);
+            setRegisterError(null); // Corrected from setRegisterError
+        } catch (error) {
+            if (error.response && error.response.status === 400) {
+                setRegisterError('Username is already taken. Please choose a different username.');
+            } else {
+                console.error('Error setting up the request:', error.message);
+            }
+            setSubmitting(false);
+        }
     };
 
     return (
@@ -90,8 +104,12 @@ const LoginForm = ({ handleLogin }) => {
 
                             {/* Submit button */}
                             <Button variant="primary" type="submit" className="mt-3">
-                                Login
+                                Register
                             </Button>
+
+                            {registerError && ( // Check if registerError is not null
+                                <NameTaken registerError={registerError} />
+                            )}
                         </Form>
                     )}
                 </Formik>
@@ -100,4 +118,4 @@ const LoginForm = ({ handleLogin }) => {
     );
 };
 
-export default LoginForm;
+export default RegisterForm;

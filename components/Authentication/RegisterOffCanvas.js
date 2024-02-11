@@ -1,33 +1,37 @@
 import { useState } from 'react';
+import axios from 'axios';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import RegisterButton from './RegisterButton';
 import RegisterHeader from './RegisterHeader';
 import RegisterForm from './RegisterForm';
 
 const RegisterOffCanvas = () => {
-    const [showLoginBtn, setShowLoginBtn] = useState(false);
-    const handleClose = () => setShowLoginBtn(false);
-    const handleShow = () => setShowLoginBtn(true);
+    const [showRegisterBtn, setShowRegisterBtn] = useState(false);  // Corrected variable name
+    const handleClose = () => setShowRegisterBtn(false);
+    const handleShow = () => setShowRegisterBtn(true);
 
-    const handleLogin = async (loginData) => {
-        const response = await axios.post('http://172.30.71.9:3004/v1/users', values);
-        // Implement your login logic here using the loginData
-        console.log('Login data:', loginData);
-        // Close the off-canvas after login
+    const handleRegister = async (registerData) => {
+        // try {
+        const response = await axios.post('http://172.30.71.9:3004/v1/users', registerData);
         handleClose();
+        // } catch (err) {
+        //     if (err.response && err.response.status === 400) {
+        //         console.error('Error:', err.response.data);
+        //     } else {
+        //         console.error('Error setting up the request:', err.message);
+        //     }
+        // }
     };
-
-
 
     return (
         <>
             <RegisterButton handleShow={handleShow} />
 
-            <Offcanvas show={showLoginBtn} onHide={handleClose} placement="end">
+            <Offcanvas show={showRegisterBtn} onHide={handleClose} placement="end">
                 <RegisterHeader closeButton={handleClose} />
 
                 <Offcanvas.Body>
-                    <RegisterForm handleLogin={handleLogin} />
+                    <RegisterForm handleRegister={handleRegister} />
                 </Offcanvas.Body>
             </Offcanvas>
         </>
