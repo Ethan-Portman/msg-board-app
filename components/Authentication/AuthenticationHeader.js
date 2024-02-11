@@ -1,11 +1,11 @@
 import Offcanvas from 'react-bootstrap/Offcanvas';
 
-const RegisterHeader = ({ closeButton }) => {
+const AuthenticationHeader = () => {
     return (
         <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Register</Offcanvas.Title>
+            <Offcanvas.Title>Authentication</Offcanvas.Title>
         </Offcanvas.Header>
     )
 }
 
-export default RegisterHeader;
+export default AuthenticationHeader;

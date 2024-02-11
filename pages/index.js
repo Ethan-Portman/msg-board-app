@@ -3,7 +3,7 @@ import Head from "next/head";
 import { Container, Row, Col } from 'react-bootstrap'
 import Header from "@/components/MessageBoard/Header";
 import MessageBoard from "@/components/MessageBoard/MessageBoard";
-import RegisterOffCanvas from "@/components/Authentication/RegisterOffCanvas";
+import AuthenticationOffCanvas from "@/components/Authentication/AuthenticationOffCanvas";
 import axios from 'axios';
 
 // Function to allow Next.js to do Static Generation pre-rendering
@@ -39,7 +39,7 @@ export default function Home({ jsonData }) {
         <Row className='justify-content-center'>
           <Col lg={8}>
             <MessageBoard jsonData={jsonData} />
-            <RegisterOffCanvas />
+            <AuthenticationOffCanvas />
           </Col>
         </Row>
       </Container>
