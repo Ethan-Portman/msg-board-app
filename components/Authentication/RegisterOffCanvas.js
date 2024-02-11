@@ -9,12 +9,15 @@ const RegisterOffCanvas = () => {
     const handleClose = () => setShowLoginBtn(false);
     const handleShow = () => setShowLoginBtn(true);
 
-    const handleLogin = (loginData) => {
+    const handleLogin = async (loginData) => {
+        const response = await axios.post('http://172.30.71.9:3004/v1/users', values);
         // Implement your login logic here using the loginData
         console.log('Login data:', loginData);
         // Close the off-canvas after login
         handleClose();
     };
+
+
 
     return (
         <>
