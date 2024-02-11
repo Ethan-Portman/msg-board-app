@@ -2,6 +2,7 @@ import MessageList from "@/components/MessageBoard/MessageList";
 import NewMessageForm from "@/components/MessageBoard/NewMessageForm";
 import { useState } from "react";
 import axios from "axios";
+import { Container, Row, Col } from 'react-bootstrap';
 
 const MessageBoard = ({ jsonData }) => {
     const [messages, setMessages] = useState(jsonData);
@@ -18,8 +19,17 @@ const MessageBoard = ({ jsonData }) => {
 
     return (
         <>
-            <NewMessageForm addNewMessage={addNewMessage} />
-            <MessageList messages={messages} />
+            <Row>
+                <Col>
+                    <h1 className="display-4 text-center">Message Board</h1>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <NewMessageForm addNewMessage={addNewMessage} />
+                    <MessageList messages={messages} />
+                </Col>
+            </Row>
         </>
     )
 };

@@ -44,15 +44,10 @@ export default function Home({ jsonData }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      <PageHeader />
-      <Container>
-        <Row className='justify-content-center'>
-          <Col lg={8}>
-            {authToken ? <AuthenticatedPage jsonData={jsonData} setToken={setAuthToken} /> : <LoginPage setToken={setAuthToken} />}
-          </Col>
-        </Row>
-      </Container>
-      <PageFooter />
+      {authToken ? <AuthenticatedPage jsonData={jsonData} setToken={setAuthToken} /> : <LoginPage setToken={setAuthToken} />}
     </>
   );
 };
+
+
+
