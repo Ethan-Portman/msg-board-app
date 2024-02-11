@@ -4,7 +4,10 @@ import { Container, Row, Col } from 'react-bootstrap'
 import Header from "@/components/MessageBoard/Header";
 import MessageBoard from "@/components/MessageBoard/MessageBoard";
 import AuthenticationOffCanvas from "@/components/Authentication/AuthenticationOffCanvas";
+import LoginPage from '@/pages/LoginPage';
+import AuthenticatedPage from '@/pages/AuthenticatedPage';
 import axios from 'axios';
+import { useEffect, useState } from "react";
 
 // Function to allow Next.js to do Static Generation pre-rendering
 // Instead of client making the axios call, Next does and delivers results for you
@@ -26,6 +29,14 @@ export async function getStaticProps() {
 }
 
 export default function Home({ jsonData }) {
+  const [authToken, setAuthToken] = useState(null);
+
+  useEffect(() => {
+    // Retrieve token from sessionStorage on the client side
+    const storedToken = sessionStorage.getItem('token');
+    setAuthToken(storedToken);
+  }, []);
+
   return (
     <>
       <Head>
@@ -38,11 +49,10 @@ export default function Home({ jsonData }) {
       <Container>
         <Row className='justify-content-center'>
           <Col lg={8}>
-            <MessageBoard jsonData={jsonData} />
-            <AuthenticationOffCanvas />
+            {authToken ? <AuthenticatedPage jsonData={jsonData} setToken={setAuthToken} /> : <LoginPage setToken={setAuthToken} />}
           </Col>
         </Row>
       </Container>
     </>
   );
-}
+};
