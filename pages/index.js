@@ -1,12 +1,12 @@
 // index.js
 import Head from "next/head";
 import { Container, Row, Col } from 'react-bootstrap'
-import Header from "@/components/MessageBoard/Header";
-import LoginPage from '@/pages/LoginPage';
-import AuthenticatedPage from '@/pages/AuthenticatedPage';
-import Footer from "@/components/MessageBoard/Footer";
 import axios from 'axios';
 import { useEffect, useState } from "react";
+import PageHeader from "@/components/StaticPageComponents/PageHeader";
+import PageFooter from "@/components/StaticPageComponents/PageFooter";
+import LoginPage from '@/pages/LoginPage';
+import AuthenticatedPage from '@/pages/AuthenticatedPage';
 
 // Function to allow Next.js to do Static Generation pre-rendering
 // Instead of client making the axios call, Next does and delivers results for you
@@ -44,7 +44,7 @@ export default function Home({ jsonData }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      <Header />
+      <PageHeader />
       <Container>
         <Row className='justify-content-center'>
           <Col lg={8}>
@@ -52,7 +52,7 @@ export default function Home({ jsonData }) {
           </Col>
         </Row>
       </Container>
-      <Footer />
+      <PageFooter />
     </>
   );
 };
