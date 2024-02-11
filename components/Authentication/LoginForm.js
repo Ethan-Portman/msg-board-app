@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, Form, Row, Col, Button, Alert } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import NameTaken from './NameTaken';
+import AuthenticationError from './AuthenticationError';
 
 // Define the Validation Schema for Registration
 const schema = yup.object().shape({
@@ -111,7 +111,7 @@ const LoginForm = ({ handleLogin }) => {
                             </Button>
 
                             {loginError && ( // Check if registerError is not null
-                                <NameTaken registerError={loginError} />
+                                <AuthenticationError error={loginError} />
                             )}
                         </Form>
                     )}

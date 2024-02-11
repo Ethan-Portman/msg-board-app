@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Alert from 'react-bootstrap/Alert';
 
-function NameTaken({ registerError }) {
+function AuthenticationError({ error }) {
     const [show, setShow] = useState(true);
 
     if (show) {
@@ -9,11 +9,11 @@ function NameTaken({ registerError }) {
             <Alert variant="danger" onClose={() => setShow(false)} dismissible>
                 <Alert.Heading>Oh snap!</Alert.Heading>
                 <p>
-                    {registerError}
+                    {error}
                 </p>
             </Alert>
         );
     }
 }
 
-export default NameTaken;
+export default AuthenticationError;

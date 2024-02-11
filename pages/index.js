@@ -1,10 +1,7 @@
 // index.js
 import Head from "next/head";
-import { Container, Row, Col } from 'react-bootstrap'
 import axios from 'axios';
 import { useEffect, useState } from "react";
-import PageHeader from "@/components/StaticPageComponents/PageHeader";
-import PageFooter from "@/components/StaticPageComponents/PageFooter";
 import LoginPage from '@/pages/LoginPage';
 import AuthenticatedPage from '@/pages/AuthenticatedPage';
 
