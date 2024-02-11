@@ -2,10 +2,9 @@
 import Head from "next/head";
 import { Container, Row, Col } from 'react-bootstrap'
 import Header from "@/components/MessageBoard/Header";
-import MessageBoard from "@/components/MessageBoard/MessageBoard";
-import AuthenticationOffCanvas from "@/components/Authentication/AuthenticationOffCanvas";
 import LoginPage from '@/pages/LoginPage';
 import AuthenticatedPage from '@/pages/AuthenticatedPage';
+import Footer from "@/components/MessageBoard/Footer";
 import axios from 'axios';
 import { useEffect, useState } from "react";
 
@@ -53,6 +52,7 @@ export default function Home({ jsonData }) {
           </Col>
         </Row>
       </Container>
+      <Footer />
     </>
   );
 };
