@@ -37,7 +37,7 @@ const RegisterForm = ({ handleRegister }) => {
                 console.error('Error setting up the request:', error.message);
             }
             setSubmitting(false);
-        }
+        };
     };
 
     return (
