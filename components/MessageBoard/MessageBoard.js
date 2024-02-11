@@ -1,5 +1,6 @@
-import MessageList from "./MessageList";
-import NewMessageForm from "./NewMessageForm";
+import Footer from "@/components/MessageBoard/Footer";
+import MessageList from "@/components/MessageBoard/MessageList";
+import NewMessageForm from "@/components/MessageBoard/NewMessageForm";
 import { useState } from "react";
 import axios from "axios";
 
@@ -20,6 +21,7 @@ const MessageBoard = ({ jsonData }) => {
         <>
             <NewMessageForm addNewMessage={addNewMessage} />
             <MessageList messages={messages} />
+            <Footer />
         </>
     )
 };

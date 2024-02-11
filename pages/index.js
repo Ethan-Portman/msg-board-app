@@ -1,8 +1,9 @@
+// index.js
 import Head from "next/head";
 import { Container, Row, Col } from 'react-bootstrap'
-import Header from "@/components/Header";
-import MessageBoard from "@/components/MessageBoard";
-import Footer from "@/components/Footer";
+import Header from "@/components/MessageBoard/Header";
+import MessageBoard from "@/components/MessageBoard/MessageBoard";
+import RegisterOffCanvas from "@/components/Authentication/RegisterOffCanvas";
 import axios from 'axios';
 
 // Function to allow Next.js to do Static Generation pre-rendering
@@ -33,16 +34,15 @@ export default function Home({ jsonData }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
+      <Header />
       <Container>
         <Row className='justify-content-center'>
           <Col lg={8}>
-            <Header />
             <MessageBoard jsonData={jsonData} />
-            <Footer />
+            <RegisterOffCanvas />
           </Col>
         </Row>
       </Container>
-
     </>
   );
 }
