@@ -6,9 +6,11 @@ import { Tab, Tabs, Container, Row, Col } from 'react-bootstrap';
 import LoginForm from '../components/Authentication/LoginForm';
 import RegisterForm from '../components/Authentication/RegisterForm';
 import PageHeader from '@/components/StaticPageComponents/PageHeader';
+import { useRouter } from 'next/router'; // Import the useRouter hook
 
-const LoginPage = ({ setToken }) => {
+const Login = () => {
     const [key, setKey] = useState('login'); // State to manage active tab
+    const router = useRouter(); // Initialize the useRouter hook
 
     const handleRegister = async (registerData) => {
         const response = await axios.post('http://172.30.71.9:3004/v1/users', registerData);
@@ -19,7 +21,8 @@ const LoginPage = ({ setToken }) => {
         const { token } = response.data;
         // Store the token in sessionStorage
         sessionStorage.setItem('token', token);
-        setToken(token);
+
+        router.push('/Home');
     };
 
     return (
@@ -49,4 +52,4 @@ const LoginPage = ({ setToken }) => {
     );
 };
 
-export default LoginPage;
+export default Login;

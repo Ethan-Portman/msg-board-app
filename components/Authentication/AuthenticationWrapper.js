@@ -2,19 +2,32 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-const AuthenticationWrapper = ({ children }) => {
+const AuthenticationWrapper = ({ children, setToken }) => {
     const router = useRouter();
-    const token = sessionStorage.getItem('token');
 
     useEffect(() => {
-        // Check if user is authenticated
-        if (!token) {
-            router.push('/login');  // Redirect if not
-        }
-    }, [token, router]);
+        const token = sessionStorage.getItem('token');
 
-    // Render the child components if authenticated
-    return token ? children : null;
+        const isValidToken = (token) => {
+            if (!token) {
+                return false;
+            }
+
+            try {
+                // Your token validation logic here
+                return true;
+            } catch (err) {
+                console.error("Error decoding or validating token:", err);
+                return false;
+            }
+        }
+
+        if (!isValidToken(token)) {
+            router.push('/Login');
+        }
+    }, [router]);
+
+    return <>{children}</>;
 };
 
 export default AuthenticationWrapper;

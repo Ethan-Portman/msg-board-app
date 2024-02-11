@@ -2,36 +2,12 @@
 import Head from "next/head";
 import axios from 'axios';
 import { useEffect, useState } from "react";
-import LoginPage from '@/pages/LoginPage';
-import AuthenticatedPage from '@/pages/AuthenticatedPage';
+import Login from '@/pages/Login';
+import Home from '@/pages/Home';
+import AuthenticationWrapper from "@/components/Authentication/AuthenticationWrapper";
 
-// Function to allow Next.js to do Static Generation pre-rendering
-// Instead of client making the axios call, Next does and delivers results for you
-export async function getStaticProps() {
-  let jsonData;
-
-  try {
-    const { data } = await axios.get('http://localhost:3004/v1/messages');
-    jsonData = data;
-  } catch (error) {
-    console.log('API Error: ' + error);
-  }
-
-  return {
-    props: {
-      jsonData
-    }
-  }
-}
-
-export default function Home({ jsonData }) {
-  const [authToken, setAuthToken] = useState(null);
-
-  useEffect(() => {
-    // Retrieve token from sessionStorage on the client side
-    const storedToken = sessionStorage.getItem('token');
-    setAuthToken(storedToken);
-  }, []);
+export default function Home() {
+  const [token, setToken] = useState(null);
 
   return (
     <>
@@ -41,10 +17,10 @@ export default function Home({ jsonData }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      {authToken ? <AuthenticatedPage jsonData={jsonData} setToken={setAuthToken} /> : <LoginPage setToken={setAuthToken} />}
+      <AuthenticationWrapper setToken={setToken}>
+        <Home setToken={setToken} />
+      </AuthenticationWrapper>
+      <Login />
     </>
   );
 };
-
-
-

@@ -1,11 +1,17 @@
 import MessageList from "@/components/MessageBoard/MessageList";
 import NewMessageForm from "@/components/MessageBoard/NewMessageForm";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Container, Row, Col } from 'react-bootstrap';
 
 const MessageBoard = ({ jsonData }) => {
-    const [messages, setMessages] = useState(jsonData);
+    const [messages, setMessages] = useState([]);
+
+    useEffect(() => {
+        if (jsonData) {
+            setMessages(jsonData);
+        }
+    }, [jsonData]);
 
     const addNewMessage = async (values) => {
         try {
