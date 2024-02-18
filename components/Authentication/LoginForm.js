@@ -1,5 +1,18 @@
+/*
+This component represents a login form for a Next.js application. 
+   - Utilizes the Formik library for handling form state and validation 
+   - Utilizes the Yup library for building a validation schema used by Formik
+
+Form Fields
+    - username
+    - password
+
+Form is responsible for handling login attempts and communicating with the
+parent component through the 'handleLogin' prop.
+*/
+
 import React, { useState } from 'react';
-import { Card, Form, Row, Col, Button, Alert } from 'react-bootstrap';
+import { Card, Form, Row, Col, Button } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import AuthenticationError from './AuthenticationError';
