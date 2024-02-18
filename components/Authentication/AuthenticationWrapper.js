@@ -1,4 +1,15 @@
-// AuthenticationWrapper.js
+/*
+This component enforces user authentication in a Next.js app. 
+   - It checks for a valid sessionStorage token, representing if the user is logged in
+       - redirects user to login page if token is absent or invalid. 
+   - Sets the token state for managing user authentication across the app. 
+
+Usage: 
+<AuthenticationWrapper> 
+   <SomeComponent /> 
+</AuthenticationWrapper>.
+*/
+
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
@@ -12,9 +23,8 @@ const AuthenticationWrapper = ({ children, setToken }) => {
             if (!token) {
                 return false;
             }
-
             try {
-                // Your token validation logic here
+                setToken(token);
                 return true;
             } catch (err) {
                 console.error("Error decoding or validating token:", err);
@@ -25,9 +35,11 @@ const AuthenticationWrapper = ({ children, setToken }) => {
         if (!isValidToken(token)) {
             router.push('/Login');
         }
-    }, [router]);
+    }, [router, setToken]);
 
-    return <>{children}</>;
+    if (isValidToken) {
+        return <>{children}</>;
+    }
 };
 
 export default AuthenticationWrapper;
