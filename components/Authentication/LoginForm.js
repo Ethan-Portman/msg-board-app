@@ -40,7 +40,7 @@ const LoginForm = ({ handleLogin }) => {
     // Handles all errors, including server-side
     const handleFormData = async (values, { resetForm, setSubmitting }) => {
         try {
-            await handleLogin(values);
+            handleLogin(values);
             resetForm();
             setSubmitting(false);
             setLoginError(null);
