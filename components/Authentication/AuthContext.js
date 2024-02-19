@@ -1,26 +1,43 @@
-// AuthContext.js
+/*
+Defines a React Context for managing authentication state
+  - AuthProvider: Wraps application with the authentication context
+  - useAuth: To consume the authentication context within components
+
+The context provides:
+  - token / setToken: 
+  - loading: 
+
+AuthProvider will attempt to load token from local storage 
+  - Loading represents the time it takes to do this
+*/
+
 import { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Check if the token is stored in localStorage during initialization
         const storedToken = localStorage.getItem('token');
-        console.log("AUTH PROVIDER: " + storedToken);
         if (storedToken) {
             setToken(storedToken);
         }
+        setLoading(false);
     }, []);
 
     const contextValue = {
         token,
         setToken,
+        loading,
     };
 
-    return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
+    return (
+        <AuthContext.Provider value={contextValue}>
+            {!loading && children} {/* Render children only when loading is false */}
+        </AuthContext.Provider>
+    );
 };
 
 export const useAuth = () => {
