@@ -1,24 +1,27 @@
 /*
-This Next.js component represents the main page of the message board app
-  - Fetches data from message-board-api on component mount
-  - Handles user authentication with a token
-  - Conditionally renders either the message board or the login page 
-      - The AuthenticationWrapper ensures protected access to the message board
+This Next.js component represents the main page of the message board app.
+  - It handles user authentication with a token.
+      - Conditionally renders the public message board if user is logged in. 
+      - Redirects the user to the login page if not logged in. 
+  - Fetches data (public messages) from the message-board-api on component mount.
 */
 
 import Head from "next/head";
 import axios from 'axios';
 import { useEffect, useState } from "react";
-import { useRouter } from 'next/router'; // Import the useRouter
-import Login from '@/pages/Login';
-import AuthenticationWrapper from "@/components/Authentication/AuthenticationWrapper";
+import { Container, Row, Col, Button } from 'react-bootstrap';
+import MessageBoard from "@/components/MessageBoard/MessageBoard";
+import { useAuth } from "@/components/Authentication/AuthContext";
+import { useRouter } from "next/router";
 
-export default function Home() {
-  const [token, setToken] = useState(null);         // User Authentication
-  const [jsonData, setJsonData] = useState(null);   // Fetched data from the Server
-  const router = useRouter();                       // For Routing
+const Home = () => {
+  const { token, setToken } = useAuth();             // Token for logging in
+  const [jsonData, setJsonData] = useState(null);    // Public Messages renderd on the Server
+  const router = useRouter();                        // For routing to Login/
 
-  // Fetch public messages data from the API on component mount 
+
+  // If user is not authenticated (token is not present), redirect to the login page
+  // Fetch messages from the server on component mount
   useEffect(() => {
     (async () => {
       try {
@@ -27,14 +30,15 @@ export default function Home() {
       } catch (error) {
         console.error('Error fetching data:', error);
       }
+      if (!token) {
+        router.push('/Login');
+      }
     })();
-  }, []);
+  }, [token, router]);
 
-  // Logout function to remove token and navigate to login page
   const handleLogout = () => {
     sessionStorage.removeItem('token');
     setToken(null);
-    router.push('/Login');
   };
 
   return (
@@ -45,21 +49,20 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      {/* Conditional rendering based on user authentication */}
+      { /* Only Render MessageBoard if user is logged in */}
       {token ? (
-        <AuthenticationWrapper>
-          <Container>
-            <Row className='justify-content-center'>
-              <Col lg={8}>
-                <MessageBoard jsonData={jsonData} />
-                <Button onClick={handleLogout}>LOG OUT</Button>
-              </Col>
-            </Row>
-          </Container>
-        </AuthenticationWrapper>
-      ) : (
-        <Login />
-      )}
+        <Container>
+          <Row className='justify-content-center'>
+            <Col lg={8}>
+              <MessageBoard jsonData={jsonData} />
+              <Button onClick={handleLogout}>LOG OUT</Button>
+            </Col>
+          </Row>
+        </Container>
+      ) : null}
+
     </>
   );
 };
+
+export default Home;
