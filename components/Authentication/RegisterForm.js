@@ -1,23 +1,5 @@
-/*
-This component represents a registation form for a Next.js application
-   - Utilizes the Formik library for handling form state and validation 
-   - Utilizes the Yup library for building a validation schema used by Formik
-
-Form Fields
-    - username
-    - password
-
-Form is responsible for handling registation and communicating with the
-parent component through the 'handleLogin' prop.
-
-Errors in Login are displayed with an AuthenticationError. 
-*/
-
-import { useState, useEffect } from 'react';
-import { Card, Form, Row, Col, Button, Toast } from 'react-bootstrap';
-import { Formik } from 'formik';
-import * as yup from 'yup';
-import AuthenticationError from './AuthenticationError';
+import { useState } from 'react';
+import { Card } from 'react-bootstrap';
 import { registerSchema } from './FormSchemas';
 import FormParent from './FormParent';
 

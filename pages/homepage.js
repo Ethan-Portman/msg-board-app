@@ -1,21 +1,27 @@
-// pages/home.js
+// pages/homepage.js
 
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
-import axios from 'axios';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import MessageBoard from '@/components/MessageBoard/MessageBoard';
 import { useAuth } from '@/components/Authentication/AuthContext';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
-const HomePage = ({ jsonData }) => {
-    const { setToken } = useAuth();
+const HomePage = () => {
     const router = useRouter();
+    const { token, setToken, loading } = useAuth();
+
+    useEffect(() => {
+        if (!loading) {
+            if (token == null) { router.push('/login'); }
+            if (router.pathname == '/') { router.push('/homepage'); }
+        }
+    }, [loading, token, router]);
 
     const handleLogout = () => {
         localStorage.removeItem('token');
         setToken(null);
-        router.push('/login');
     };
 
     return (
@@ -29,7 +35,7 @@ const HomePage = ({ jsonData }) => {
             <Container>
                 <Row className="justify-content-center">
                     <Col lg={8}>
-                        <MessageBoard jsonData={jsonData} />
+                        <MessageBoard />
                         <Button onClick={handleLogout}>LOG OUT</Button>
                     </Col>
                 </Row>

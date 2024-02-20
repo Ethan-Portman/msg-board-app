@@ -34,7 +34,7 @@ const NewMessageForm = ({ addNewMessage }) => {
                 <Card.Title>Add a Message:</Card.Title>
                 {/* Formik component for handling form state and validation */}
                 <Formik
-                    validationSchema={schema}
+                    schema={schema}
                     onSubmit={handleFormData}
                     initialValues={{ name: '', msgText: '' }}
                 >

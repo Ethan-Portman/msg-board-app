@@ -1,5 +1,6 @@
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { Formik } from 'formik';
+import AuthenticationError from './AuthenticationError';
 
 const FormParent = ({ validationSchema, onSubmit, submitError, btnTitle }) => (
     <Formik

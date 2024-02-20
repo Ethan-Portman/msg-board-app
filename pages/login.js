@@ -13,36 +13,30 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { Tab, Tabs, Container, Row, Col } from 'react-bootstrap';
+import { Tab, Tabs, Container, Row, Col, Button, Toast } from 'react-bootstrap';
 import LoginForm from '@/components/Authentication/LoginForm';
 import RegisterForm from '@/components/Authentication/RegisterForm';
 import PageHeader from '@/components/StaticPageComponents/PageHeader';
 import { useAuth } from '@/components/Authentication/AuthContext';
+import { signIn, register } from '@/lib/auth';
 
 
-const login = () => {
+const Login = () => {
     const [key, setKey] = useState('login');
     const router = useRouter();
     const { setToken } = useAuth();
 
-    const handleRegister = async (registerData) => {
-        const response = await axios.post('http://172.30.71.9:3004/v1/users', registerData);
-    };
+    const handleRegister = async (credentials) => {
+        const response = await register(credentials);
 
-    const handleLogin = async (loginData) => {
+    };
+    const handleLogin = async (credentials) => {
         try {
-            console.log('Logging in...');
-            const response = await axios.post('http://172.30.71.9:3004/v1/login', loginData);
-            const token = response.data.token;
-            console.log('Login successful. Token:', token);
-            localStorage.setItem('token', token);
+            const token = await signIn(credentials);
             setToken(token);
-            router.push('/');
-        } catch (error) {
-            console.error('Login failed:', error);
-        }
+            router.push('/homepage');
+        } catch (error) { console.error('Login failed:', error); }
     };
-
     return (
         <>
             <PageHeader />
@@ -70,4 +64,4 @@ const login = () => {
     );
 };
 
-export default login;
+export default Login;
