@@ -18,20 +18,21 @@ import { Card, Form, Row, Col, Button } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import AuthenticationError from './AuthenticationError';
+import { loginSchema } from './FormSchemas';
 
 // Define the Validation Schema for Login
-const schema = yup.object().shape({
-    name: yup
-        .string()
-        .trim()
-        .max(20, 'Name cannot be more than 15 characters.')
-        .required('Name is required.'),
-    password: yup
-        .string()
-        .trim()
-        .max(20, 'Password cannot be more than 15 characters.')
-        .required('Password is required.'),
-});
+// const schema = yup.object().shape({
+//     name: yup
+//         .string()
+//         .trim()
+//         .max(20, 'Name cannot be more than 15 characters.')
+//         .required('Name is required.'),
+//     password: yup
+//         .string()
+//         .trim()
+//         .max(20, 'Password cannot be more than 15 characters.')
+//         .required('Password is required.'),
+// });
 
 
 const LoginForm = ({ handleLogin }) => {
@@ -60,7 +61,7 @@ const LoginForm = ({ handleLogin }) => {
             <Card.Body>
                 {/* Formik component for handling form state and validation */}
                 <Formik
-                    validationSchema={schema}
+                    validationSchema={loginSchema}
                     onSubmit={handleFormData}
                     initialValues={{ name: '', password: '' }}
                 >

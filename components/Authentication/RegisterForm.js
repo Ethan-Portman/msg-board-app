@@ -13,54 +13,41 @@ parent component through the 'handleLogin' prop.
 Errors in Login are displayed with an AuthenticationError. 
 */
 
-import React, { useState } from 'react';
-import { Card, Form, Row, Col, Button } from 'react-bootstrap';
+import { useState, useEffect } from 'react';
+import { Card, Form, Row, Col, Button, Toast } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import AuthenticationError from './AuthenticationError';
-
-// Define the Validation Schema for Registration
-const schema = yup.object().shape({
-    name: yup
-        .string()
-        .trim()
-        .min(2, 'Name must be at least 2 characters.')
-        .max(15, 'Name cannot be more than 15 characters.')
-        .matches(/^[A-Za-z0-9_]+$/, 'Invalid name. Use upper or lower case letters, 0 to 9, or underscore only.')
-        .required('Name is required.'),
-    password: yup
-        .string()
-        .trim()
-        .min(6, 'Password must be at least 6 characters.')
-        .max(15, 'Password cannot be more than 15 characters.')
-        .required('Password is required.'),
-});
+import { registerSchema } from './FormSchemas';
 
 const RegisterForm = ({ handleRegister }) => {
     const [registerError, setRegisterError] = useState(null);
+    const [showRegisterSuccess, setShowRegisterSuccess] = useState(false);
 
     const handleFormData = async (values, { resetForm, setSubmitting }) => {
         try {
             await handleRegister(values);
             resetForm();
-            setSubmitting(false);
             setRegisterError(null);
+            setShowRegisterSuccess(true);
+            setSubmitting(false);
         } catch (error) {
-            if (error.response && error.response.status === 400) {
+            if (error.response.status === 409) {
                 setRegisterError('Username is already taken. Please choose a different username.');
-            } else {
-                console.error('Error setting up the request:', error.message);
+            } else if (error.response.status === 400) {
+                setRegisterError('Error setting up the request:');
             }
             setSubmitting(false);
-        };
+        }
     };
+
 
     return (
         <Card className="mb-3">
             <Card.Body>
                 {/* Formik component for handling form state and validation */}
                 <Formik
-                    validationSchema={schema}
+                    validationSchema={registerSchema}
                     onSubmit={handleFormData}
                     initialValues={{ name: '', password: '' }}
                 >
@@ -118,9 +105,23 @@ const RegisterForm = ({ handleRegister }) => {
                             </Form.Group>
 
                             {/* Submit button */}
-                            <Button variant="primary" type="submit" className="mt-3">
-                                Register
-                            </Button>
+                            <Row>
+                                <Col>
+                                    <Button variant="primary" type="submit" className="mt-3">
+                                        Register
+                                    </Button>
+                                </Col>
+
+                                <Col>
+                                    <Toast show={showRegisterSuccess} onClose={() => setShowRegisterSuccess(false)} className="mb-5">
+                                        <Toast.Header>
+                                            <strong className="me-auto">Registration Complete</strong>
+                                        </Toast.Header>
+                                        <Toast.Body>User <strong>{values.name}</strong> created </Toast.Body>
+                                    </Toast>
+                                </Col>
+
+                            </Row>
 
                             {registerError && (  // Display the Error
                                 <AuthenticationError error={registerError} />
