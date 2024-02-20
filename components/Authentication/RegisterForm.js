@@ -3,21 +3,21 @@ import { Card } from 'react-bootstrap';
 import { registerSchema } from './FormSchemas';
 import FormParent from './FormParent';
 
-const RegisterForm = ({ handleSubmit }) => {
-    const [submitError, setSubmitError] = useState(null);
+const RegisterForm = ({ handleRegister }) => {
+    const [errorMessage, setErrorMessage] = useState(null);
+    const [successMessage, setSuccessMessage] = useState(null);
 
     const handleFormData = async (values, { resetForm, setSubmitting }) => {
         try {
-            await handleSubmit(values);
             resetForm();
-            setSubmitError(null);
             setSubmitting(false);
+            await handleRegister(values);
+            setSuccessMessage('Registration Complete');
+            setTimeout(() => { setSuccessMessage(null); }, 3000);
         } catch (error) {
-            if (error.response.status === 409) {
-                setSubmitError('Username is already taken. Please choose a different username.');
-            } else if (error.response.status === 400) {
-                setSubmitError('Error setting up the request:');
-            }
+            if (error.message === 'Username taken') { setErrorMessage('Username is already taken.'); }
+            else if (error.message === 'Unexpected Error') { setErrorMessage('Error setting up the request:'); };
+            setTimeout(() => { setErrorMessage(null); }, 2000);
             setSubmitting(false);
         }
     };
@@ -29,8 +29,9 @@ const RegisterForm = ({ handleSubmit }) => {
                 <FormParent
                     validationSchema={registerSchema}
                     onSubmit={handleFormData}
-                    submitError={submitError}
-                    btnTitle={"register"}
+                    errorMessage={errorMessage}
+                    successMessage={successMessage}
+                    btnTitle={"Register"}
                 />
             </Card.Body>
         </Card >

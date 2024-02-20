@@ -4,25 +4,21 @@ import { loginSchema } from './FormSchemas';
 import FormParent from './FormParent';
 
 
-const LoginForm = ({ handleSubmit }) => {
-    const [submitError, setSubmitError] = useState(null);
+const LoginForm = ({ handleLogin }) => {
+    const [errorMessage, setErrorMessage] = useState(null);
 
     const handleFormData = async (values, { resetForm, setSubmitting }) => {
         try {
-            await handleSubmit(values);
             resetForm();
-            setSubmitError(null);
             setSubmitting(false);
+            await handleLogin(values);
         } catch (error) {
-            if (error.response && error.response.status === 401) {
-                setSubmitError('Invalid Login, please try again.');
-            } else {
-                setSubmitError('Something went wrong.');
-            }
+            if (error.message === 'Invalid Credentials') { setErrorMessage('Invalid Credentials.'); }
+            else if (error.message === 'Username taken') { setErrorMessage('Error setting up the request:'); };
+            setTimeout(() => { setErrorMessage(null); }, 2000);
             setSubmitting(false);
         };
     };
-
 
     return (
         <Card className="mb-3">
@@ -31,8 +27,9 @@ const LoginForm = ({ handleSubmit }) => {
                 <FormParent
                     validationSchema={loginSchema}
                     onSubmit={handleFormData}
-                    submitError={submitError}
-                    btnTitle={"login"}
+                    errorMessage={errorMessage}
+                    successMessage={null}
+                    btnTitle={"Login"}
                 />
             </Card.Body>
         </Card>
