@@ -22,11 +22,11 @@ const FormParent = ({ validationSchema, onSubmit, submitError, btnTitle }) => (
         }) => (
             <Form noValidate onSubmit={handleSubmit}>
                 {/* Form field for entering a name */}
-                <Form.Group as={Row} className="align-items-center mb-3" controlId="name">
+                <Form.Group as={Row} className="align-items-center mb-4" controlId="name">
                     <Col xs={12}>
                         <Form.Label>Username:</Form.Label>
                     </Col>
-                    <Col xs={12}>
+                    <Col xs={12} style={{ position: 'relative' }}>
                         <Form.Control
                             type="text"
                             placeholder="Username"
@@ -37,18 +37,19 @@ const FormParent = ({ validationSchema, onSubmit, submitError, btnTitle }) => (
                             isInvalid={touched.name && errors.name}
                         />
                         {/* Validation feedback for the name field */}
-                        <Form.Control.Feedback type="invalid">
+
+                        <Form.Control.Feedback type="invalid" style={{ position: 'absolute', top: '100%' }}>
                             {errors.name}
                         </Form.Control.Feedback>
                     </Col>
                 </Form.Group>
 
                 {/* Form field for entering a password */}
-                <Form.Group as={Row} className="align-items-center mb-3" controlId="password">
+                <Form.Group as={Row} className="align-items-center my-5" controlId="password">
                     <Col xs={12}>
                         <Form.Label>Password</Form.Label>
                     </Col>
-                    <Col xs={12}>
+                    <Col xs={12} style={{ position: 'relative' }}>
                         <Form.Control
                             type="password"
                             placeholder="Your password"
@@ -59,7 +60,7 @@ const FormParent = ({ validationSchema, onSubmit, submitError, btnTitle }) => (
                             isInvalid={touched.password && errors.password}
                         />
                         {/* Validation feedback for the password field */}
-                        <Form.Control.Feedback type="invalid">
+                        <Form.Control.Feedback type="invalid" style={{ position: 'absolute', top: '100%' }}>
                             {errors.password}
                         </Form.Control.Feedback>
                     </Col>
