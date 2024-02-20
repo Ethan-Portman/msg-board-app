@@ -2,7 +2,7 @@ import { Form, Row, Col, Button } from 'react-bootstrap';
 import { Formik } from 'formik';
 import AuthenticationError from './AuthenticationError';
 
-const FormParent = ({ validationSchema, onSubmit, submitError, btnTitle }) => (
+const FormParent = ({ validationSchema, onSubmit, errorMessage, successMessage, btnTitle }) => (
     < Formik
         validationSchema={validationSchema}
         onSubmit={onSubmit}
@@ -45,9 +45,9 @@ const FormParent = ({ validationSchema, onSubmit, submitError, btnTitle }) => (
                 </Form.Group>
 
                 {/* Form field for entering a password */}
-                <Form.Group as={Row} className="align-items-center my-5" controlId="password">
+                <Form.Group as={Row} className="align-items-center" controlId="password">
                     <Col xs={12}>
-                        <Form.Label>Password</Form.Label>
+                        <Form.Label className="mt-1">Password</Form.Label>
                     </Col>
                     <Col xs={12} style={{ position: 'relative' }}>
                         <Form.Control
@@ -67,13 +67,17 @@ const FormParent = ({ validationSchema, onSubmit, submitError, btnTitle }) => (
                 </Form.Group>
 
                 {/* Submit button */}
-                <Button variant="primary" type="submit" className="mt-3" disabled={isSubmitting || !isValid} >
-                    {btnTitle}
-                </Button>
-
-                {submitError && (  // Display the Error
-                    <AuthenticationError error={submitError} />
-                )}
+                <Row className="mt-5 mx-0 p-0">
+                    <Col xs={3} className='m-0 p-0 text-center'>
+                        <Button variant="primary" type="submit" className="px-5" disabled={isSubmitting || !isValid}>
+                            {btnTitle}
+                        </Button>
+                    </Col>
+                    <Col xs={4}>
+                        {errorMessage && (<p className='text-danger'>{errorMessage}</p>)}
+                        {successMessage && (<p className='text-success'>{successMessage}</p>)}
+                    </Col>
+                </Row>
             </Form>
         )}
     </Formik >
