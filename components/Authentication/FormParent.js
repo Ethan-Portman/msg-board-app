@@ -3,10 +3,11 @@ import { Formik } from 'formik';
 import AuthenticationError from './AuthenticationError';
 
 const FormParent = ({ validationSchema, onSubmit, submitError, btnTitle }) => (
-    <Formik
+    < Formik
         validationSchema={validationSchema}
         onSubmit={onSubmit}
         initialValues={{ name: '', password: '' }}
+        validateOnMount
     >
         {({
             handleSubmit,
@@ -15,6 +16,9 @@ const FormParent = ({ validationSchema, onSubmit, submitError, btnTitle }) => (
             values,
             touched,
             errors,
+            isSubmitting,
+            isValidating,
+            isValid
         }) => (
             <Form noValidate onSubmit={handleSubmit}>
                 {/* Form field for entering a name */}
@@ -62,7 +66,7 @@ const FormParent = ({ validationSchema, onSubmit, submitError, btnTitle }) => (
                 </Form.Group>
 
                 {/* Submit button */}
-                <Button variant="primary" type="submit" className="mt-3">
+                <Button variant="primary" type="submit" className="mt-3" disabled={isSubmitting || !isValid} >
                     {btnTitle}
                 </Button>
 
@@ -71,7 +75,7 @@ const FormParent = ({ validationSchema, onSubmit, submitError, btnTitle }) => (
                 )}
             </Form>
         )}
-    </Formik>
+    </Formik >
 )
 
 export default FormParent;
