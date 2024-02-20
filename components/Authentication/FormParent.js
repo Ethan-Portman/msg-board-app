@@ -1,6 +1,5 @@
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import { Formik } from 'formik';
-import AuthenticationError from './AuthenticationError';
 
 const FormParent = ({ validationSchema, onSubmit, errorMessage, successMessage, btnTitle }) => (
     < Formik
@@ -17,10 +16,10 @@ const FormParent = ({ validationSchema, onSubmit, errorMessage, successMessage, 
             touched,
             errors,
             isSubmitting,
-            isValidating,
             isValid
         }) => (
             <Form noValidate onSubmit={handleSubmit}>
+
                 {/* Form field for entering a name */}
                 <Form.Group as={Row} className="align-items-center mb-4" controlId="name">
                     <Col xs={12}>
@@ -36,8 +35,6 @@ const FormParent = ({ validationSchema, onSubmit, errorMessage, successMessage, 
                             isValid={touched.name && !errors.name}
                             isInvalid={touched.name && errors.name}
                         />
-                        {/* Validation feedback for the name field */}
-
                         <Form.Control.Feedback type="invalid" style={{ position: 'absolute', top: '100%' }}>
                             {errors.name}
                         </Form.Control.Feedback>
@@ -59,25 +56,26 @@ const FormParent = ({ validationSchema, onSubmit, errorMessage, successMessage, 
                             isValid={touched.password && !errors.password}
                             isInvalid={touched.password && errors.password}
                         />
-                        {/* Validation feedback for the password field */}
                         <Form.Control.Feedback type="invalid" style={{ position: 'absolute', top: '100%' }}>
                             {errors.password}
                         </Form.Control.Feedback>
                     </Col>
                 </Form.Group>
 
-                {/* Submit button */}
                 <Row className="mt-5 mx-0 p-0">
+                    {/* Submit button */}
                     <Col xs={3} className='m-0 p-0 text-center'>
                         <Button variant="primary" type="submit" className="px-5" disabled={isSubmitting || !isValid}>
                             {btnTitle}
                         </Button>
                     </Col>
+                    {/* Form Feedback */}
                     <Col xs={4}>
                         {errorMessage && (<p className='text-danger'>{errorMessage}</p>)}
                         {successMessage && (<p className='text-success'>{successMessage}</p>)}
                     </Col>
                 </Row>
+
             </Form>
         )}
     </Formik >
