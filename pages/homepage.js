@@ -9,12 +9,15 @@ import NavBar from '@/components/StaticPageComponents/NavBar';
 import MessageBoard from '@/components/MessageBoard/MessageBoard';
 import { fetchMessages, redirectIfNeeded } from '@/lib/homepageUtil';
 
+const handleLogout = (setToken) => {
+    localStorage.removeItem('token');
+    setToken(null);
+};
 
 export const getServerSideProps = async () => {
     const jsonData = await fetchMessages();
     return { props: { jsonData } };
 };
-
 
 const HomePage = ({ jsonData }) => {
     const router = useRouter();
@@ -23,11 +26,6 @@ const HomePage = ({ jsonData }) => {
     useEffect(() => {
         redirectIfNeeded(loading, token, router);
     }, [loading, token]);
-
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        setToken(null);
-    };
 
     return (
         <>
