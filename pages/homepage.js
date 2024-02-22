@@ -7,36 +7,22 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useAuth } from '@/components/Authentication/AuthContext';
 import NavBar from '@/components/StaticPageComponents/NavBar';
 import MessageBoard from '@/components/MessageBoard/MessageBoard';
+import { fetchMessages, redirectIfNeeded } from '@/lib/homepageUtil';
 
-export const getServerSideProps = async (context) => {
-    try {
-        const response = await axios.get('http://172.30.71.9:3004/v1/messages');
-        const data = response.data;
-        return {
-            props: {
-                jsonData: data,
-            },
-        };
-    } catch (error) {
-        console.log('Error fetching data:', error.message);
-        return {
-            props: {
-                jsonData: null,
-            }
-        }
-    }
-}
+
+export const getServerSideProps = async () => {
+    const jsonData = await fetchMessages();
+    return { props: { jsonData } };
+};
+
 
 const HomePage = ({ jsonData }) => {
     const router = useRouter();
     const { token, setToken, loading } = useAuth();
 
     useEffect(() => {
-        if (!loading) {
-            if (token == null) { router.push('/login'); }
-            if (router.pathname == '/') { router.push('/homepage'); }
-        }
-    }, [loading, token, router]);
+        redirectIfNeeded(loading, token, router);
+    }, [loading, token]);
 
     const handleLogout = () => {
         localStorage.removeItem('token');
