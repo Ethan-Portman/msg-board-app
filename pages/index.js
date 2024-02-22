@@ -1,5 +1,5 @@
 // pages/index.js
-import HomePage from "./homepage";
+import { HomePage } from "./homepage";
 
 const Home = () => {
   return (

@@ -8,8 +8,26 @@ import { useAuth } from '@/components/Authentication/AuthContext';
 import NavBar from '@/components/StaticPageComponents/NavBar';
 import MessageBoard from '@/components/MessageBoard/MessageBoard';
 
+export const getServerSideProps = async (context) => {
+    try {
+        const response = await axios.get('http://172.30.71.9:3004/v1/messages');
+        const data = response.data;
+        return {
+            props: {
+                jsonData: data,
+            },
+        };
+    } catch (error) {
+        console.log('Error fetching data:', error.message);
+        return {
+            props: {
+                jsonData: null,
+            }
+        }
+    }
+}
 
-const HomePage = () => {
+const HomePage = ({ jsonData }) => {
     const router = useRouter();
     const { token, setToken, loading } = useAuth();
 
@@ -38,7 +56,7 @@ const HomePage = () => {
             <Container>
                 <Row className="justify-content-center">
                     <Col lg={8}>
-                        <MessageBoard />
+                        <MessageBoard jsonData={jsonData} />
                         <Button onClick={handleLogout}>LOG OUT</Button>
                     </Col>
                 </Row>
