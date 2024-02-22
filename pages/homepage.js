@@ -1,12 +1,13 @@
 // pages/homepage.js
-
-import { useState, useEffect } from 'react';
-import Head from 'next/head';
-import { Container, Row, Col, Button } from 'react-bootstrap';
-import MessageBoard from '@/components/MessageBoard/MessageBoard';
-import { useAuth } from '@/components/Authentication/AuthContext';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import Head from 'next/head';
 import axios from 'axios';
+import { Container, Row, Col, Button } from 'react-bootstrap';
+import { useAuth } from '@/components/Authentication/AuthContext';
+import NavBar from '@/components/StaticPageComponents/NavBar';
+import MessageBoard from '@/components/MessageBoard/MessageBoard';
+
 
 const HomePage = () => {
     const router = useRouter();
@@ -31,6 +32,8 @@ const HomePage = () => {
                 <meta name="description" content="A simple message board app" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
+
+            <NavBar />
 
             <Container>
                 <Row className="justify-content-center">
