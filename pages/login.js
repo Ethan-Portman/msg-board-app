@@ -1,55 +1,59 @@
-/*
-  LoginPage.js - Next.js component for user authentication
-  - Provides a login page with tabs for login and registration
-  - Utilizes the AuthContext to manage user authentication state
-  
-  Functions:
-  - handleRegister: Async function to handle user registration
-  - handleLogin: Async function to handle user login
-    - Sends login request to the server, sets the token on success, and redirects to '/'
-    - Handles login errors and logs them to the console
-*/
-
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { Tab, Tabs, Container, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
-import { Tab, Tabs, Container, Row, Col, Button, Toast } from 'react-bootstrap';
+
 import LoginForm from '@/components/Authentication/LoginForm';
 import RegisterForm from '@/components/Authentication/RegisterForm';
 import PageHeader from '@/components/StaticPageComponents/PageHeader';
 import { useAuth } from '@/components/Authentication/AuthContext';
-import { signIn, register } from '@/lib/auth';
-
 
 const Login = () => {
-    const [key, setKey] = useState('login');
     const router = useRouter();
     const { setToken } = useAuth();
+    const [activeTab, setActiveTab] = useState('login');
 
     const handleRegister = async (credentials) => {
-        const response = await register(credentials);
-
-    };
-    const handleLogin = async (credentials) => {
+        const REGISTER_ENDPOINT = 'http://172.30.71.9:3004/v1/users';
         try {
-            const token = await signIn(credentials);
+            const response = await axios.post(REGISTER_ENDPOINT, credentials);
+        } catch (error) {
+            if (error.response.status === 409) {
+                throw new Error('Username taken');
+            } else {
+                throw new Error('Unexpected Error');
+            }
+        }
+    };
+
+    const handleLogin = async (credentials) => {
+        const LOGIN_API_ENDPOINT = 'http://172.30.71.9:3004/v1/login';
+        try {
+            const response = await axios.post(LOGIN_API_ENDPOINT, credentials);
+            const token = response.data.token;
+            localStorage.setItem('token', token);
             setToken(token);
             router.push('/homepage');
-        } catch (error) { console.error('Login failed:', error); }
+        } catch (error) {
+            if (error.response.status === 401) {
+                throw new Error('Invalid Credentials');
+            } else {
+                throw new Error('Unexpected Error');
+            }
+        }
     };
+
     return (
         <>
             <PageHeader />
+
             <Container>
                 <Row className='justify-content-center'>
                     <Col lg={8}>
+
                         <h1 className="display-6">Authentication</h1>
-                        <Tabs
-                            id="authentication-tabs"
-                            activeKey={key}
-                            onSelect={(k) => setKey(k)}
-                            className="mb-3"
-                        >
+
+                        <Tabs id="authentication-tabs" activeKey={activeTab} onSelect={(tab) => setActiveTab(tab)} className="mb-3">
                             <Tab eventKey="login" title="Login">
                                 <LoginForm handleLogin={handleLogin} />
                             </Tab>
@@ -57,9 +61,11 @@ const Login = () => {
                                 <RegisterForm handleRegister={handleRegister} />
                             </Tab>
                         </Tabs>
+
                     </Col>
                 </Row>
             </Container>
+
         </>
     );
 };
