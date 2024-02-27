@@ -1,18 +1,14 @@
 // pages/homepage.js
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
-import axios from 'axios';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useAuth } from '@/components/Authentication/AuthContext';
 import NavBar from '@/components/StaticPageComponents/NavBar';
 import MessageBoard from '@/components/MessageBoard/MessageBoard';
-import { fetchMessages, redirectIfNeeded } from '@/lib/homepageUtil';
+import { fetchMessages, redirectIfNeeded } from '@/lib/homepageUtil'
+import LiveChat from '@/components/LiveChat/LiveChat';
 
-const handleLogout = (setToken) => {
-    localStorage.removeItem('token');
-    setToken(null);
-};
 
 export const getServerSideProps = async () => {
     const jsonData = await fetchMessages();
@@ -22,6 +18,12 @@ export const getServerSideProps = async () => {
 const HomePage = ({ jsonData }) => {
     const router = useRouter();
     const { token, setToken, loading } = useAuth();
+    const [currentSection, setCurrentSection] = useState('home');
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        setToken(null);
+    };
 
     useEffect(() => {
         redirectIfNeeded(loading, token, router);
@@ -35,12 +37,12 @@ const HomePage = ({ jsonData }) => {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
 
-            <NavBar />
+            <NavBar currentSection={currentSection} setCurrentSection={setCurrentSection} />
 
             <Container>
                 <Row className="justify-content-center">
                     <Col lg={8}>
-                        <MessageBoard jsonData={jsonData} />
+                        {currentSection == 'messageboard' ? <MessageBoard jsonData={jsonData} /> : currentSection == 'private messages' ? <LiveChat /> : null}
                         <Button onClick={handleLogout}>LOG OUT</Button>
                     </Col>
                 </Row>
