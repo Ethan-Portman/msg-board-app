@@ -17,11 +17,12 @@ export const getServerSideProps = async () => {
 
 const HomePage = ({ jsonData }) => {
     const router = useRouter();
-    const { token, setToken, loading } = useAuth();
+    const { token, setToken, loading, setName } = useAuth();
     const [currentSection, setCurrentSection] = useState('home');
 
     const handleLogout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('name');
         setToken(null);
     };
 
@@ -39,7 +40,7 @@ const HomePage = ({ jsonData }) => {
 
             <NavBar currentSection={currentSection} setCurrentSection={setCurrentSection} />
 
-            <Container>
+            <Container fluid>
                 <Row className="justify-content-center">
                     <Col lg={8}>
                         {currentSection == 'messageboard' ? <MessageBoard jsonData={jsonData} /> : currentSection == 'private messages' ? <LiveChat /> : null}

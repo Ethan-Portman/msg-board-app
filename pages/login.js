@@ -10,7 +10,7 @@ import { useAuth } from '@/components/Authentication/AuthContext';
 
 const Login = () => {
     const router = useRouter();
-    const { setToken } = useAuth();
+    const { setToken, setName, setId } = useAuth();
     const [activeTab, setActiveTab] = useState('login');
 
     const handleRegister = async (credentials) => {
@@ -32,7 +32,11 @@ const Login = () => {
             const response = await axios.post(LOGIN_API_ENDPOINT, credentials);
             const token = response.data.token;
             localStorage.setItem('token', token);
+            localStorage.setItem('name', credentials.name);
+            localStorage.setItem('id', response.id);
             setToken(token);
+            setName(credentials.name);
+            setId(response.data.id);
             router.push('/homepage');
         } catch (error) {
             if (error.response.status === 401) {

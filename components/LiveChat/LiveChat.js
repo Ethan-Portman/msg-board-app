@@ -1,14 +1,25 @@
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import { Form, Card, ListGroup, Container, Row, Col, Button } from 'react-bootstrap';
+import { useAuth } from '@/components/Authentication/AuthContext';
+import LiveChatMessage from './LiveChatMessage';
+import UserList from './UserList';
+import LiveChatMessageList from './LiveChatMessageList';
+import SendMessageForm from './SendMessageForm';
+import axios from 'axios';
 
 
-const LiveChat = (userID, otherUserID) => {
+const LiveChat = () => {
+    const { name } = useAuth();
+    const recipient = "TO_DO";
     const [socket, setSocket] = useState(null);
     const [inputValue, setInputValue] = useState('');
     const [messages, setMessages] = useState([]);
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
+
+
         const socket = io('ws://172.30.71.9:3004', {
             path: '/socket.io',
             transports: ['websocket'],
@@ -28,70 +39,60 @@ const LiveChat = (userID, otherUserID) => {
 
     useEffect(() => {
         if (socket) {
-            socket.on('message', (message) => {
+            socket.on('privateMessage', (message) => {
+                console.log("NEW MESSAGE");
                 setMessages((prevMessages) => [...prevMessages, message]);
             });
         }
     }, [socket]);
 
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://172.30.71.9:3004/v1/users');
+                setUsers(response.data);
+                console.log(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchData(); // Call the async function immediately
+
+    }, []); // The empty dependency array means the effect runs once after the initial render
+
+
     const onSubmit = (event) => {
         event.preventDefault();
         if (socket && inputValue.trim() !== '') {
-            socket.emit('message', inputValue);
+            const newMessage = {
+                "sender": name,
+                "recipient": recipient,
+                "message": inputValue
+            }
+            socket.emit('message', newMessage);
             setInputValue('');
         }
     }
 
     return (
-        <Container className="d-flex align-items-center justify-content-center" >
-            <Card style={{ width: '40rem' }}>
-                <Card.Title>Chat</Card.Title>
-                <Container style={{ height: '300px', overflowY: 'auto' }}>
-                    <Row>
-                        <Col>
-                            <ListGroup>
-                                {/* Your list items go here */}
-                                <ListGroup.Item>Item 1</ListGroup.Item>
-                                <ListGroup.Item>Item 2</ListGroup.Item>
-                                <ListGroup.Item>Item 3</ListGroup.Item>
-                                <ListGroup.Item>Item 1</ListGroup.Item>
-                                <ListGroup.Item>Item 2</ListGroup.Item>
-                                <ListGroup.Item>Item 3</ListGroup.Item>
-                                <ListGroup.Item>Item 1</ListGroup.Item>
-                                <ListGroup.Item>Item 2</ListGroup.Item>
-                                <ListGroup.Item>Item 3</ListGroup.Item>
-                                <ListGroup.Item>Item 1</ListGroup.Item>
-                                <ListGroup.Item>Item 2</ListGroup.Item>
-                                <ListGroup.Item>Item 3</ListGroup.Item>
-                                <ListGroup.Item>Item 1</ListGroup.Item>
-                                <ListGroup.Item>Item 2</ListGroup.Item>
-                                <ListGroup.Item>Item 3</ListGroup.Item>
-                                {/* Add more ListGroup.Items as needed */}
-                            </ListGroup>
-                        </Col>
-                    </Row>
-                </Container>
+        <Container fluid className="" >
+            <Row>
+                <Col>
+                    <Card >
+                        <UserList users={users} />
+                    </Card>
+                </Col>
 
-                <Row className="mt-auto">
-                    <Col className="w-100">
-                        <Form id="form" onSubmit={onSubmit} className="w-100">
-                            <Form.Group id="input" className="mb-3 d-flex">
-                                <Form.Control
-                                    type="text"
-                                    value={inputValue}
-                                    onChange={(e) => setInputValue(e.target.value)}
-                                    className="flex-grow-1"
-                                    placeholder='Type your message'
-                                />
-                                <Button variant="primary" type="submit" className="ml-2">
-                                    Send
-                                </Button>
-
-                            </Form.Group>
-                        </Form>
-                    </Col>
-                </Row>
-            </Card>
+                <Col>
+                    <Card >
+                        <Card.Title>{recipient}</Card.Title>
+                        <LiveChatMessageList name={name} recipient={{ recipient }} />
+                        <SendMessageForm onSubmit={onSubmit} inputValue={inputValue} setInputValue={setInputValue} />
+                    </Card>
+                </Col>
+            </Row>
         </Container>
     );
 }

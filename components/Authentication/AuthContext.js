@@ -16,13 +16,19 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+    const [name, setName] = useState('');
     const [token, setToken] = useState(null);
+    const [id, setId] = useState('');
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
+        const storedName = localStorage.getItem('name');
         if (storedToken) {
             setToken(storedToken);
+        }
+        if (storedName) {
+            setToken(storedName);
         }
         setLoading(false);
     }, []);
@@ -31,6 +37,10 @@ export const AuthProvider = ({ children }) => {
         token,
         setToken,
         loading,
+        name,
+        setName,
+        id,
+        setId
     };
 
     return (
